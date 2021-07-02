@@ -86,6 +86,8 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
                                         String contents = new_contents.getText().toString();
                                         todoItem.setTodo_contents(contents);
 
+                                        //서버 UPDATE 요청('/todolist/<string:contents>/modify')
+                                        //요청 후 서버에 출력된 데이터 가져오기 ( 리스트 하나하나 만들기)
                                     }
                                 });
 
@@ -95,6 +97,8 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
                             else if(position == 1) {
                                 items.remove(curPos);
                                 notifyItemRemoved(curPos);
+                                //서버 DELETE 요청 ('/todolist/<string:contents>/delete')
+
                             }
                         }
                     });

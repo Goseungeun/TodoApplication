@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
                 Todo todo = new Todo();
                 todo.setTodo_contents(addtodo.getText().toString());
                 todoItems.add(todo);
+                //서버 POST 요청 (새로운 할 일 POST)
+                //서버에 출력된 데이터 가져오기 (리스트 하나하나 아이템으로 출력)
             }
         });
 
