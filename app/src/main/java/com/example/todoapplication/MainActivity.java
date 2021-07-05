@@ -30,10 +30,11 @@ public class MainActivity extends AppCompatActivity {
         addtodo = findViewById(R.id.input_todo);
 
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new todoAdapter(todoItems);
+        mAdapter = new todoAdapter(todoItems,this);
 
         rv_todo.setLayoutManager(mLayoutManager);
         rv_todo.setAdapter(mAdapter);
+        todoItems = new ArrayList<Todo>();
 
         //저장버튼 클릭시 이벤트
         btn_save.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 todoItems.add(todo);
                 //서버 POST 요청 (새로운 할 일 POST)
                 //서버에 출력된 데이터 가져오기 (리스트 하나하나 아이템으로 출력)
+                addtodo.setText("");
             }
         });
 

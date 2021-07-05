@@ -25,9 +25,6 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
         this.mContext = mContext;
     }
 
-    public todoAdapter(ArrayList<Todo> todoItems) {
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull  ViewGroup viewGroup, int viewType) {
