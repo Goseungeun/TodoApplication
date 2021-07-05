@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -52,54 +53,50 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private CheckBox todo_contents;
+        private Button btn_delete;
+        private Button btn_modify;
 
         public ViewHolder(View itemView){
             super(itemView);
 
             todo_contents = itemView.findViewById(R.id.todo_item);
+            btn_delete = itemView.findViewById(R.id.btn_delete);
+            btn_modify = itemView.findViewById(R.id.btn_modify);
 
-            todo_contents.setOnClickListener(new View.OnClickListener(){
+            btn_modify.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
                     int curPos = getAdapterPosition();
                     Todo todoItem = items.get(curPos);
 
-                    String[] strChoiceItem = {"수정하기","삭제하기"};
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle("원하는 작업을 선택하세요");
-                    builder.setItems(strChoiceItem, new DialogInterface.OnClickListener() {
+                    final EditText new_contents = new EditText(mContext);
+
+                    AlertDialog.Builder modify_dia = new AlertDialog.Builder(mContext);
+                    modify_dia.setTitle("일정 수정");
+                    modify_dia.setView(new_contents);
+                    modify_dia.setPositiveButton("저장", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int position) {
-                            if(position == 0){
-                                //수정작업
-                                final EditText new_contents = new EditText(mContext);
-
-                                AlertDialog.Builder modify_dia = new AlertDialog.Builder(mContext);
-                                modify_dia.setTitle("일정 수정");
-                                modify_dia.setView(new_contents);
-                                modify_dia.setPositiveButton("저장", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        String contents = new_contents.getText().toString();
-                                        todoItem.setTodo_contents(contents);
-                                        notifyItemChanged(curPos,todoItem);
-                                        //서버 UPDATE 요청('/todolist/<string:contents>/modify')
-                                        //요청 후 서버에 출력된 데이터 가져오기 ( 리스트 하나하나 만들기)
-                                    }
-                                });
-
-                                modify_dia.show();
-                            }
-
-                            else if(position == 1) {
-                                items.remove(curPos);
-                                notifyItemRemoved(curPos);
-                                //서버 DELETE 요청 ('/todolist/<string:contents>/delete')
-
-                            }
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String contents = new_contents.getText().toString();
+                            todoItem.setTodo_contents(contents);
+                            notifyItemChanged(curPos,todoItem);
+                            //서버 UPDATE 요청('/todolist/<string:contents>/modify')
+                            //요청 후 서버에 출력된 데이터 가져오기 ( 리스트 하나하나 만들기)
                         }
                     });
-                    builder.show();
+
+                    modify_dia.show();
+                }
+            });
+
+            btn_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int curPos = getAdapterPosition();
+                    Todo todoItem = items.get(curPos);
+
+                    items.remove(curPos);
+                    notifyItemRemoved(curPos);
                 }
             });
         }
