@@ -17,35 +17,37 @@ public class MainActivity extends AppCompatActivity {
     private todoAdapter mAdapter;
     private ArrayList<Todo> todoItems;
     private Button btn_save;
-    private EditText addtodo;
+    private EditText input_todo;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        todoItems = new ArrayList<Todo>();
 
         btn_save = findViewById(R.id.btn_save);
         rv_todo = findViewById(R.id.todorecycle);
-        addtodo = findViewById(R.id.input_todo);
+        input_todo = findViewById(R.id.input_todo);
 
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new todoAdapter(todoItems,this);
 
         rv_todo.setLayoutManager(mLayoutManager);
         rv_todo.setAdapter(mAdapter);
-        todoItems = new ArrayList<Todo>();
+
+
 
         //저장버튼 클릭시 이벤트
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Todo todo = new Todo();
-                todo.setTodo_contents(addtodo.getText().toString());
-                todoItems.add(todo);
+                todo.setTodo_contents(input_todo.getText().toString());
+                mAdapter.addItem(todo);
                 //서버 POST 요청 (새로운 할 일 POST)
                 //서버에 출력된 데이터 가져오기 (리스트 하나하나 아이템으로 출력)
-                addtodo.setText("");
+
             }
         });
 

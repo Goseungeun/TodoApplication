@@ -20,7 +20,7 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
     private ArrayList<Todo> items;
     private Context mContext;
 
-    public todoAdapter(ArrayList<Todo> items, Context mContext){
+    todoAdapter(ArrayList<Todo> items, Context mContext){
         this.items = items;
         this.mContext = mContext;
     }
@@ -58,7 +58,7 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
 
             todo_contents = itemView.findViewById(R.id.todo_item);
 
-            itemView.setOnClickListener(new View.OnClickListener(){
+            todo_contents.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
                     int curPos = getAdapterPosition();
@@ -82,7 +82,7 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         String contents = new_contents.getText().toString();
                                         todoItem.setTodo_contents(contents);
-
+                                        notifyItemChanged(curPos,todoItem);
                                         //서버 UPDATE 요청('/todolist/<string:contents>/modify')
                                         //요청 후 서버에 출력된 데이터 가져오기 ( 리스트 하나하나 만들기)
                                     }
