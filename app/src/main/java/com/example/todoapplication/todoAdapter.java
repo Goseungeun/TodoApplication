@@ -93,7 +93,6 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
                 @Override
                 public void onClick(View view) {
                     int curPos = getAdapterPosition();
-                    Todo todoItem = items.get(curPos);
 
                     items.remove(curPos);
                     notifyItemRemoved(curPos);

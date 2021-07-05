@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_save;
     private EditText input_todo;
     private RecyclerView.LayoutManager mLayoutManager;
+    private OKHttpAPICall apiCall = new OKHttpAPICall();
+    String base_url = "http://127.0.0.1:5000/todolist";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,11 @@ public class MainActivity extends AppCompatActivity {
                 todo.setTodo_contents(input_todo.getText().toString());
                 mAdapter.addItem(todo);
                 //서버 POST 요청 (새로운 할 일 POST)
-                //서버에 출력된 데이터 가져오기 (리스트 하나하나 아이템으로 출력)
+                new Thread(){
+                    public void run(){
+                        apiCall.post(base_url,input_todo.getText().toString());
+                    }
+                }.start();;
 
             }
         });
