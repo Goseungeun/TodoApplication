@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,8 +54,8 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private CheckBox todo_contents;
-        private Button btn_delete;
-        private Button btn_modify;
+        private ImageView btn_delete;
+        private ImageView btn_modify;
 
         public ViewHolder(View itemView){
             super(itemView);
