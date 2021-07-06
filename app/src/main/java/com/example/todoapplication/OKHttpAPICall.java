@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -18,18 +19,12 @@ import okio.BufferedSink;
 public class OKHttpAPICall {
 
     //GET request
-    public void get(String requestURL){
-        try{
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().url(requestURL).build();        //GET request
+    public void get(String requestURL , Callback callback){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(requestURL).build();        //GET request
 
-            Response response = client.newCall(request).execute();
+        client.newCall(request).enqueue(callback);
 
-            String message = response.body().string();
-            System.out.println(message);
-        } catch (Exception e) {
-            System.err.println(e.toString());
-        }
     }
 
     //POST request
