@@ -23,7 +23,7 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
     private Context mContext;
     private OKHttpAPICall apiCall = new OKHttpAPICall();
     String base_url = "http://192.168.1.81:8000/todolist";
-    String modify_url;
+    String modify_url, delete_url;
 
     todoAdapter(ArrayList<Todo> items, Context mContext){
         this.items = items;
@@ -104,9 +104,18 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
                 @Override
                 public void onClick(View view) {
                     int curPos = getAdapterPosition();
-
+                    Todo todoItem = items.get(curPos);
+                    String delete_contents = todoItem.getTodo_contents();
+                    //UI변경
                     items.remove(curPos);
                     notifyItemRemoved(curPos);
+                    //서버 DELETE 요청
+                    delete_url = base_url+"/"+delete_contents+"/delete";
+                    new Thread(){
+                        public void run(){
+                            apiCall.delete(delete_url);
+                        }
+                    }.start();;
                 }
             });
         }

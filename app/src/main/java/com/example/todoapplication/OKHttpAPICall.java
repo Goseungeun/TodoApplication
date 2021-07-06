@@ -83,6 +83,21 @@ public class OKHttpAPICall {
             System.err.println(e.toString());
         }
     }
+
+    //DELETE request
+    public void delete(String requestURL) {
+        try {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder().url(requestURL).delete().build();
+
+            Response response = client.newCall(request).execute();
+
+            String message = response.body().string();
+            System.out.println(message);
+        }catch (Exception e){
+            System.err.println(e.toString());
+        }
+    }
 }
 
 
