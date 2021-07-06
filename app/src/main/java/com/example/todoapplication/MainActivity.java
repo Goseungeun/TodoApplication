@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText input_todo;
     private RecyclerView.LayoutManager mLayoutManager;
     private OKHttpAPICall apiCall = new OKHttpAPICall();
-    String base_url = "http://127.0.0.1:5000/todolist";
+    String base_url = "http://192.168.1.81:8000/todolist";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

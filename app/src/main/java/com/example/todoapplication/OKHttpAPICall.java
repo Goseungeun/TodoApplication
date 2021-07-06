@@ -1,10 +1,19 @@
 package com.example.todoapplication;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.BufferedSink;
 
 public class OKHttpAPICall {
 
@@ -27,7 +36,16 @@ public class OKHttpAPICall {
     public void post(String requestURL, String inputdata) {
         try {
             OkHttpClient client = new OkHttpClient();
-            RequestBody body = new FormBody.Builder().add("data",inputdata).build();
+            JSONObject jsonInput = new JSONObject();
+
+            try{
+                jsonInput.put("todo",inputdata);
+            }catch (JSONException e){
+                e.printStackTrace();
+                return;
+            }
+
+            RequestBody body = RequestBody.create(MediaType.parse("application/json"),jsonInput.toString());
 
             Request request = new Request.Builder().url(requestURL).post(body).build();
 
