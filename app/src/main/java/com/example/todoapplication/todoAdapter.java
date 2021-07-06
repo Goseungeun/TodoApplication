@@ -21,6 +21,9 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
     public Object setItem;
     private ArrayList<Todo> items;
     private Context mContext;
+    private OKHttpAPICall apiCall = new OKHttpAPICall();
+    String base_url = "http://192.168.1.81:8000/todolist";
+    String modify_url;
 
     todoAdapter(ArrayList<Todo> items, Context mContext){
         this.items = items;
@@ -78,11 +81,18 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
                     modify_dia.setPositiveButton("저장", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            //UI 변경
                             String contents = new_contents.getText().toString();
+                            String old_contents = todoItem.getTodo_contents();      //url에 넣기 위한 contents를 받아옴
                             todoItem.setTodo_contents(contents);
                             notifyItemChanged(curPos,todoItem);
                             //서버 UPDATE 요청('/todolist/<string:contents>/modify')
-                            //요청 후 서버에 출력된 데이터 가져오기 ( 리스트 하나하나 만들기)
+                            modify_url = base_url+"/"+old_contents+"/modify";
+                            new Thread(){
+                                public void run(){
+                                    apiCall.put(modify_url,contents);
+                                }
+                            }.start();;
                         }
                     });
 

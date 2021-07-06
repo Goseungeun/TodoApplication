@@ -59,6 +59,30 @@ public class OKHttpAPICall {
     }
 
     //PUT request
+    public void put(String requestURL, String inputdata) {
+        try {
+            OkHttpClient client = new OkHttpClient();
+            JSONObject jsonInput = new JSONObject();
+
+            try{
+                jsonInput.put("todo",inputdata);
+            }catch (JSONException e){
+                e.printStackTrace();
+                return;
+            }
+
+            RequestBody body = RequestBody.create(MediaType.parse("application/json"),jsonInput.toString());
+
+            Request request = new Request.Builder().url(requestURL).put(body).build();
+
+            Response response = client.newCall(request).execute();
+
+            String message = response.body().string();
+            System.out.println(message);
+        }catch (Exception e){
+            System.err.println(e.toString());
+        }
+    }
 }
 
 
