@@ -59,13 +59,13 @@ public class OKHttpAPICall {
     }
 
     //PUT request
-    public void put(String requestURL, String inputdata) {
+    public void put(String requestURL, String InputData) {
         try {
             OkHttpClient client = new OkHttpClient();
             JSONObject jsonInput = new JSONObject();
 
             try{
-                jsonInput.put("todo",inputdata);
+                jsonInput.put("todo",InputData);
             }catch (JSONException e){
                 e.printStackTrace();
                 return;
