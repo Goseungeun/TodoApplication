@@ -25,7 +25,7 @@ public class todoAdapter extends RecyclerView.Adapter<todoAdapter.ViewHolder>{
     String base_url = "http://192.168.1.81:8000/todolist";
     String modify_url, delete_url;
 
-    todoAdapter(ArrayList<Todo> items, Context mContext){
+    todoAdapter(ArrayList<Todo> items,Context mContext){
         this.items = items;
         this.mContext = mContext;
     }

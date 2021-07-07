@@ -19,11 +19,22 @@ import okio.BufferedSink;
 public class OKHttpAPICall {
 
     //GET request
-    public void get(String requestURL , Callback callback){
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(requestURL).build();        //GET request
+    public String get(String requestURL){
+        String result = null;
+        try{
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder().url(requestURL).build();
 
-        client.newCall(request).enqueue(callback);
+            Response response = client.newCall(request).execute();
+
+            result = response.body().string();
+            System.out.println(result);
+
+        }catch(Exception e){
+            System.err.println(e.toString());
+        }
+
+        return result;
 
     }
 

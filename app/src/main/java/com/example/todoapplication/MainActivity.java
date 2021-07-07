@@ -1,11 +1,14 @@
 package com.example.todoapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,20 +52,25 @@ public class MainActivity extends AppCompatActivity {
         rv_todo.setLayoutManager(mLayoutManager);
         rv_todo.setAdapter(mAdapter);
 
-        load_recent_DB();
+        get_DB();
+        System.out.println(todoItems);
 
         //저장버튼 클릭시 이벤트
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String add_todo = input_todo.getText().toString();
+                input_todo.setText("");
                 //UI 변경
                 Todo todo = new Todo();
-                todo.setTodo_contents(input_todo.getText().toString());
-                mAdapter.addItem(todo);
+                todo.setTodo_contents(add_todo);
+                todoItems.add(todo);
+                mAdapter = new todoAdapter(todoItems,MainActivity.this);
+                rv_todo.setAdapter(mAdapter);
                 //서버 POST 요청 (새로운 할 일 POST)
                 new Thread(){
                     public void run(){
-                        apiCall.post(base_url,input_todo.getText().toString());
+                        apiCall.post(base_url,add_todo);
                     }
                 }.start();;
 
@@ -71,45 +79,53 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void load_recent_DB(){
+    private void get_DB(){
+        //DB 에서 내용 받아오는 함수
+
         new Thread() {
             public void run(){
-                apiCall.get(base_url,callback);
+                String output;
+                output = apiCall.get(base_url);         //DB 값 잘 넘어옴
+
+                System.out.println(output);
+
+                System.out.println("test");
+                jsonParsing(output);
+                Message msg = handler.obtainMessage();
+                handler.sendMessage(msg);
+
             }
         }.start();;
+
     }
 
-    private final Callback callback = new Callback() {
-        @Override
-        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-            System.err.println(e.toString());
-        }
+    private void jsonParsing(String str)
+    {
+        try{
+            JSONArray todoArray = new JSONArray(str);
+            for(int i = 0; i < todoArray.length(); i++){
+                JSONObject todoObject = todoArray.getJSONObject(i);
 
-        @Override
-        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-            String DB_Data = response.body().string();
-            System.out.println(DB_Data);
-            try{
-                JSONArray todoArray = new JSONArray(DB_Data);
+                Todo item = new Todo();
 
-                for(int i = 0; i < todoArray.length() ; i++){
-                    JSONObject jObject = todoArray.getJSONObject(i);
+                item.setTodo_contents(todoObject.getString("todo_contents"));
 
-                    Todo item = new Todo();
-
-                    item.setTodo_contents(jObject.getString("todo_contents")); //item에 DB 내용 잘 들어감
-                    todoItems.add(item);
-                }
-            }catch (JSONException e){
-                e.printStackTrace();
+                todoItems.add(item);
             }
+        }catch(JSONException e){
+            e.printStackTrace();
+            todoItems = null;
+        }
+    }
 
-            if(mAdapter == null){
-                mAdapter =  new todoAdapter(todoItems,getApplicationContext());
+    final Handler handler = new Handler(){
+        public void handleMessage(Message msg) {
+            if(todoItems !=null) {
+                System.out.println("여기");
+                mAdapter = new todoAdapter(todoItems, MainActivity.this);
                 rv_todo.setHasFixedSize(true);
                 rv_todo.setAdapter(mAdapter);
             }
-
         }
     };
 
